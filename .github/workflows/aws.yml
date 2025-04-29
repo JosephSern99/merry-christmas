@@ -35,16 +35,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Maven wrapper and permissions
         run: |
-          mkdir -p ~/.m2
-          chmod -R 755 ~/.m2
-          curl -sSL https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.9.4/maven-wrapper-3.9.4.jar -o ~/.m2/maven-wrapper.jar
-          echo "export MAVEN_WRAPPER_VERSION=3.9.4" >> $GITHUB_ENV
-          export PATH=$PATH:~/mvnw
-          chmod +x ./mvnw
+          # Ensure mvnw is executable
+          if [ -f ./mvnw ]; then
+            chmod +x ./mvnw
+          else
+            echo "Error: mvnw script not found in repository"
+            exit 1
+          fi
+          # Set up Maven wrapper configuration if missing
+          mkdir -p .mvn/wrapper
+          echo "distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.4/apache-maven-3.9.4-bin.zip" > .mvn/wrapper/maven-wrapper.properties
 
       - name: Remove npm credentials
         run: |
