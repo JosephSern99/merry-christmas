@@ -30,92 +30,86 @@ on:
   push:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-
 jobs:
   deploy:
-    name: Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Make Maven wrapper executable
-      run: chmod +x ./mvnw
+      - name: Set up Maven wrapper and permissions
+        run: |
+          mkdir -p ~/.m2
+          chmod -R 755 ~/.m2
+          curl -sSL https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.9.4/maven-wrapper-3.9.4.jar -o ~/.m2/maven-wrapper.jar
+          echo "export MAVEN_WRAPPER_VERSION=3.9.4" >> $GITHUB_ENV
+          export PATH=$PATH:~/mvnw
+          chmod +x ./mvnw
 
-    - name: Set up Maven wrapper
-      run: |
-        mkdir -p ~/.m2
-        chmod -R 755 ~/.m2
-        curl -sSL https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.9.4/maven-wrapper-3.9.4.jar -o ~/.m2/maven-wrapper.jar
-        echo "export MAVEN_WRAPPER_VERSION=3.9.4" >> $GITHUB_ENV
-        export PATH=$PATH:~/mvnw
+      - name: Remove npm credentials
+        run: |
+          rm -rf ~/.npm
+          rm -rf ~/.npmrc
 
-    - name: Remove npm credentials
-      run: |
-        rm -rf ~/.npm
-        rm -rf ~/.npmrc
+      - name: Set up Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '17'
 
-    - name: Set up Java
-      uses: actions/setup-java@v1
-      with:
-        java-version: '21'
+      - name: Build with Maven wrapper
+        run: |
+          ./mvnw -U -DskipTests -Pprod clean package
 
-    - name: Build with Maven wrapper
-      run: |
-        ./mvnw -U -DskipTests -Pprod clean package 
+      - name: Set up SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
 
-    - name: Set up SSH key
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      run: |
-        mkdir -p ~/.ssh
-        echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
+      - name: Kill port 8080
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+        run: |
+          ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} << EOF
+          cd /home/${SERVER_USERNAME}
+          chmod +x kill8080.sh
+          ./kill8080.sh
+          timeout=30
+          while [ $(fuser -n tcp 8080 | wc -l) -gt 0 ]; do
+            sleep 1
+            timeout=$((timeout-1))
+            if [ $timeout -eq 0 ]; then
+              echo "Timeout reached, force killing process"
+              fuser -k -n tcp 8080
+              break
+            fi
+          done
+          EOF
 
-    - name: Kill port 8080
-      env:
-        SERVER_HOST: ${{ secrets.SERVER_HOST }}
-        SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
-      run: |
-        ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} << EOF
-        cd /home/${SERVER_USERNAME}
-        chmod +x kill8080.sh
-        ./kill8080.sh
-        timeout=30
-        while [ $(fuser -n tcp 8080 | wc -l) -gt 0 ]; do
-          sleep 1
-          timeout=$((timeout-1))
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout reached, force killing process"
-            fuser -k -n tcp 8080
-            break
-          fi
-        done
-        EOF
+      - name: Deploy to server
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+        run: |
+          ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} "true"
+          ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} "rm -rf /home/${SERVER_USERNAME}/app"
+          rsync -avz --delete -e "ssh -o 'ServerAliveInterval 60' -o 'ServerAliveCountMax 3' -o 'StrictHostKeyChecking=no' -i ~/.ssh/id_rsa" target/quarkus-app ${SERVER_USERNAME}@${SERVER_HOST}:/home/${SERVER_USERNAME}/app
+          echo "Waiting for rsync to finish..."
+          while [ ! -z "$(ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} 'pgrep -f rsync')" ]; do
+            sleep 1
+          done
+          echo "rsync finished."
 
-    - name: Deploy to server
-      env:
-        SERVER_HOST: ${{ secrets.SERVER_HOST }}
-        SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
-      run: |
-        ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} "true"
-        ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} "rm -rf /home/${SERVER_USERNAME}/app"
-        rsync -avz --delete -e "ssh -o 'ServerAliveInterval 60' -o 'ServerAliveCountMax 3' -o 'StrictHostKeyChecking=no' -i ~/.ssh/id_rsa" target/quarkus-app ${SERVER_USERNAME}@${SERVER_HOST}:/home/${SERVER_USERNAME}/app
-        echo "Waiting for rsync to finish..."
-        while [ ! -z "$(ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} 'pgrep -f rsync')" ]; do
-          sleep 1
-        done
-        echo "rsync finished."
-
-    - name: Execute JAR file in background
-      env:
-        SERVER_HOST: ${{ secrets.SERVER_HOST }}
-        SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
-      run: |
-        ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} << EOF
-        nohup java -Xms384m -Xmx1024m -jar /home/${SERVER_USERNAME}/app/quarkus-app/quarkus-run.jar > /dev/null 2>&1 &
-        exit
-        EOF
+      - name: Execute JAR file in background
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+        run: |
+          ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} << EOF
+          nohup java -Xms384m -Xmx1024m -jar /home/${SERVER_USERNAME}/app/quarkus-app/quarkus-run.jar > /dev/null 2>&1 &
+          exit
+          EOF
