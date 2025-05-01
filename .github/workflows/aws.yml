@@ -24,7 +24,7 @@
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
 
-name: Deploy to Amazon ECS
+name: Deploy to Amazon EC2
 
 on:
   push:
@@ -36,35 +36,40 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Set up Maven wrapper and permissions
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Create .npmrc
         run: |
-          # Ensure mvnw is executable
-          if [ -f ./mvnw ]; then
-            chmod +x ./mvnw
-          else
-            echo "Error: mvnw script not found in repository"
-            exit 1
-          fi
-          # Set up Maven wrapper configuration if missing
-          mkdir -p .mvn/wrapper
-          echo "distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.4/apache-maven-3.9.4-bin.zip" > .mvn/wrapper/maven-wrapper.properties
+          echo "registry=https://registry.npmjs.org/" > .npmrc
+          echo "always-auth=false" >> .npmrc
 
       - name: Remove npm credentials
         run: |
           rm -rf ~/.npm
           rm -rf ~/.npmrc
 
-      - name: Set up Java and Maven
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          maven-version: '3.9.4'
+      - name: List directory contents
+        run: ls -la
+
+      - name: Make mvnw executable
+        run: chmod +x ./mvnw
 
       - name: Build with Maven wrapper
-        run: |
-          ./mvnw -U -DskipTests -Pprod clean package
+        run: ./mvnw -U -DskipTests -Pprod clean package
 
       - name: Set up SSH key
         env:
