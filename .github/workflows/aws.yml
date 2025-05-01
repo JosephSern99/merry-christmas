@@ -80,27 +80,6 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
 
-      - name: Kill port 8080
-        env:
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
-        run: |
-          ssh -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa ${SERVER_USERNAME}@${SERVER_HOST} << EOF
-          cd /home/${SERVER_USERNAME}
-          chmod +x kill8080.sh
-          ./kill8080.sh
-          timeout=30
-          while [ $(fuser -n tcp 8080 | wc -l) -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $timeout -eq 0 ]; then
-              echo "Timeout reached, force killing process"
-              fuser -k -n tcp 8080
-              break
-            fi
-          done
-          EOF
-
       - name: Deploy to server
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
