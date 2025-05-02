@@ -11,6 +11,21 @@ import java.time.Instant;
 @MongoEntity(collection = "chat_attachment")
 @RegisterForReflection
 public class ChatAttachment extends PanacheMongoEntityBase {
+
+    @BsonId
+    public ObjectId id;
+
+    public String fileName;
+    public String fileExtension;
+    public String contentType;
+    public String base64;
+    public String senderId;
+    public String recipientId;
+    public String organisationId;
+    public Instant timestamp;
+    public String url;
+
+    // Getters and setters
     public ObjectId getId() {
         return id;
     }
@@ -19,29 +34,12 @@ public class ChatAttachment extends PanacheMongoEntityBase {
         this.id = id;
     }
 
-    @BsonId
-    public ObjectId id;
-
     public String getFileName() {
         return fileName;
     }
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
-    }
-
-    public String fileName;
-    public String fileExtension;
-    public String contentType;
-    public String url; // For transmitting file data in responses
-    public String senderId; // ID of the user who sent the attachment
-
-    public String getRecipientId() {
-        return recipientId;
-    }
-
-    public void setRecipientId(String recipientId) {
-        this.recipientId = recipientId;
     }
 
     public String getFileExtension() {
@@ -68,12 +66,28 @@ public class ChatAttachment extends PanacheMongoEntityBase {
         this.url = url;
     }
 
+    public String getBase64() {
+        return base64;
+    }
+
+    public void setBase64(String base64) {
+        this.base64 = base64;
+    }
+
     public String getSenderId() {
         return senderId;
     }
 
     public void setSenderId(String senderId) {
         this.senderId = senderId;
+    }
+
+    public String getRecipientId() {
+        return recipientId;
+    }
+
+    public void setRecipientId(String recipientId) {
+        this.recipientId = recipientId;
     }
 
     public String getOrganisationId() {
@@ -92,31 +106,12 @@ public class ChatAttachment extends PanacheMongoEntityBase {
         this.timestamp = timestamp;
     }
 
-    public String recipientId; // ID of the user who received the attachment
-    public String organisationId; // ID of the organisation associated with the attachment
-    public Instant timestamp;
-    public String base64;
-
-
     public ChatAttachment() {
     }
-
-
-
-    public String getBase64() {
-        return base64;
-    }
-
-    public void setBase64(String base64) {
-        this.base64 = base64;
-    }
-
 
     public static ChatAttachment findById(ObjectId attachmentId) {
         return find("id", attachmentId).firstResult();
     }
-
-
 
     @Override
     public String toString() {

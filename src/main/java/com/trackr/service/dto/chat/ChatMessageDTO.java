@@ -1,7 +1,6 @@
 package com.trackr.service.dto.chat;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChatMessageDTO {
@@ -13,7 +12,24 @@ public class ChatMessageDTO {
     private Instant editedAt;
     private Boolean isEdited;
     private Boolean read;
-    private List<ChatAttachmentDTO> attachments = new ArrayList<>();
+    private List<ChatAttachmentDTO> attachments;
+
+    public ChatMessageDTO() {
+
+    }
+
+    public ChatMessageDTO(String id, String senderId, String recipientId, String content,
+                          List<ChatAttachmentDTO> attachments, Instant timestamp, boolean read, boolean isEdited) {
+        this.id = id;
+        this.senderId = senderId;
+        this.recipientId = recipientId;
+        this.content = content;
+        this.attachments = attachments; // Ensure not null
+        this.timestamp = timestamp;
+        this.read = read;
+        this.isEdited = isEdited;
+    }
+
 
     // Getters and setters
     public String getId() { return id; }

@@ -215,24 +215,45 @@ public class ChatResource {
         try {
             ChatAttachmentDTO attachment = chatService.getAttachment(attachmentId, true);
 
-            if (attachment == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\":\"Attachment not found\"}")
-                        .build();
-            }
-
-            // Make sure we're returning the attachment data
-            if (attachment.getBase64() == null || attachment.getBase64().isEmpty()) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\":\"Attachment data not available\"}")
-                        .build();
-            }
+            log.info("Attachment: {}", attachment);
+//
+//            if (attachment == null) {
+//                return Response.status(Response.Status.NOT_FOUND)
+//                        .entity("{\"error\":\"Attachment not found\"}")
+//                        .build();
+//            }
+//
+//            // Make sure we're returning the attachment data
+//            if (attachment.getBase64() == null || attachment.getBase64().isEmpty()) {
+//                return Response.status(Response.Status.NOT_FOUND)
+//                        .entity("{\"error\":\"Attachment data not available\"}")
+//                        .build();
+//            }
 
             return Response.ok(attachment).build();
         } catch (Exception e) {
             LOG.error("Error retrieving attachment data", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"error\":\"Failed to retrieve attachment data\"}")
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("attachments/{id}/metadata")
+    public Response getAttachmentMetadata(@PathParam("id") String id) {
+        try {
+            ChatAttachmentDTO attachment = chatService.getAttachment(id, false);
+            if (attachment == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("{\"error\":\"Attachment not found\"}")
+                        .build();
+            }
+            return Response.ok(attachment).build();
+        } catch (Exception e) {
+            LOG.error("Error retrieving attachment metadata", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\":\"Failed to retrieve attachment metadata\"}")
                     .build();
         }
     }

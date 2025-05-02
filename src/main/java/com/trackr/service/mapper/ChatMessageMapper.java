@@ -2,11 +2,14 @@ package com.trackr.service.mapper;
 
 import com.trackr.domain.ChatAttachment;
 import com.trackr.domain.ChatMessage;
+import com.trackr.repository.ChatAttachmentRepository;
 import com.trackr.service.dto.chat.ChatAttachmentDTO;
 import com.trackr.service.dto.chat.ChatMessageDTO;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +18,12 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class ChatMessageMapper {
 
+    private static final Logger log = LoggerFactory.getLogger(ChatMessageMapper.class);
     @Inject
     ChatAttachmentMapper attachmentMapper;
+
+    @Inject
+    ChatAttachmentRepository attachmentRepository;
 
     public ChatMessageDTO toDto(ChatMessage entity) {
         if (entity == null) {
@@ -33,20 +40,23 @@ public class ChatMessageMapper {
         dto.setIsEdited(entity.isEdited);
         dto.setRead(entity.read);
 
+        List<ChatAttachmentDTO> attachmentDTOs = new ArrayList<>();
+
         // Populate attachments - need to fetch from database
         if (entity.attachments != null && !entity.attachments.isEmpty()) {
-            List<ChatAttachmentDTO> attachmentDTOs = new ArrayList<>();
-            for (ObjectId attachmentId : entity.attachments) {
-                ChatAttachment attachment = ChatAttachment.findById(attachmentId);
+            for (ChatAttachmentDTO attachmentId : entity.attachments) {
+                ChatAttachment attachment = attachmentRepository.findById(attachmentId.getId());
                 if (attachment != null) {
                     attachmentDTOs.add(attachmentMapper.toDto(attachment));
                 }
             }
-            dto.setAttachments(attachmentDTOs);
         }
+        dto.setAttachments(attachmentDTOs);
 
         return dto;
     }
+
+
 
     public ChatMessage toEntity(ChatMessageDTO dto) {
         if (dto == null) {
@@ -54,9 +64,11 @@ public class ChatMessageMapper {
         }
 
         ChatMessage entity = new ChatMessage();
-        if (dto.getId() != null) {
+
+        if (dto.getId() != null && !dto.getId().isEmpty()) {
             entity.id = new ObjectId(dto.getId());
         }
+
         entity.senderId = dto.getSenderId();
         entity.recipientId = dto.getRecipientId();
         entity.content = dto.getContent();
@@ -67,10 +79,9 @@ public class ChatMessageMapper {
 
         // Handle attachments
         if (dto.getAttachments() != null && !dto.getAttachments().isEmpty()) {
-            entity.attachments = new ArrayList<>();
             for (ChatAttachmentDTO attachmentDTO : dto.getAttachments()) {
                 if (attachmentDTO.getId() != null) {
-                    entity.attachments.add(new ObjectId(attachmentDTO.getId()));
+                    entity.attachments.add(attachmentDTO);
                 }
             }
         }

@@ -1,6 +1,5 @@
 package com.trackr.service;
 
-import com.mongodb.client.MongoClient;
 import com.trackr.domain.*;
 import com.trackr.repository.ChatAttachmentRepository;
 import com.trackr.service.dto.*;
@@ -13,6 +12,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.*;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class ChatService {
+    private static final Logger log = LoggerFactory.getLogger(ChatService.class);
     @Inject
     EmployeeService employeeService;
 
@@ -28,6 +30,9 @@ public class ChatService {
 
     @Inject
     ChatAttachmentMapper attachmentMapper;
+
+    @Inject
+    ChatAttachmentRepository attachmentRepository;
 
 
     // Check if users are in the same organization
@@ -65,15 +70,33 @@ public class ChatService {
         ChatMessage message = chatMessageMapper.toEntity(messageDTO);
         message.organisationId = orgId.get();
 
+        // Ensure attachments list is initialized
+        if (message.attachments == null) {
+            message.attachments = new ArrayList<>();
+        }
+
         // Handle attachments if present
         if (messageDTO.getAttachments() != null && !messageDTO.getAttachments().isEmpty()) {
-            message.attachments = new ArrayList<>();
+            // Don't modify the existing attachments list, create a new one
+            List<ChatAttachmentDTO> attachmentDTOs = new ArrayList<>();
 
             for (ChatAttachmentDTO attachmentDTO : messageDTO.getAttachments()) {
-                ChatAttachment attachment = attachmentMapper.toEntity(attachmentDTO);
-                attachment.persist();
-                message.attachments.add(attachment.id);
+                // Make sure we're storing the DTOs properly
+                if (attachmentDTO.getId() == null) {
+                    // If it's a new attachment, persist it first
+                    ChatAttachment attachment = attachmentMapper.toEntity(attachmentDTO);
+                    attachment.persist();
+
+                    // Now update the DTO with the ID
+                    attachmentDTO.setId(attachment.id.toString());
+                }
+                // Add the attachment DTO to our list
+                attachmentDTOs.add(attachmentDTO);
             }
+            // Replace the attachments list with our properly processed one
+            message.attachments = attachmentDTOs;
+        } else {
+            message.attachments = new ArrayList<>();
         }
 
         message.persist();
@@ -114,8 +137,11 @@ public class ChatService {
     // Get chat history between two users
     public List<ChatMessageDTO> getChatHistory(String user1Id, String user2Id, int page, int limit) {
         List<ChatMessage> messages = ChatMessage.findChatBetweenUsers(user1Id, user2Id, limit, page);
+
+
         return chatMessageMapper.toDtoList(messages);
     }
+
 
     // Get conversations list (using MongoDB aggregation)
     public List<ChatConversationDTO> getConversations(String userId) {
@@ -181,7 +207,7 @@ public class ChatService {
         try {
             // Find the attachment in your database
             // This is a placeholder - implement your actual database access logic
-            ChatAttachment attachment = ChatAttachment.findById(attachmentId);
+            ChatAttachment attachment = attachmentRepository.findById(attachmentId);
             // Create DTO with basic metadata
             ChatAttachmentDTO dto = new ChatAttachmentDTO();
             dto.setId(String.valueOf(attachment.getId()));
@@ -224,7 +250,7 @@ public class ChatService {
         }
 
         try {
-            // Map DTO to entity
+            // Map DTO to entity - fixed this line
             ChatAttachment attachment = attachmentMapper.toEntity(attachmentDTO);
 
             // Ensure file extension is set if not provided
@@ -243,15 +269,21 @@ public class ChatService {
                 attachment.contentType = determineContentType(attachment.fileExtension);
             }
 
+            // Set timestamp if not provided
+            if (attachment.timestamp == null) {
+                attachment.timestamp = Instant.now();
+            }
+
             // Save to database
             attachment.persist();
 
             ChatMessage message = new ChatMessage();
             message.attachments = new ArrayList<>();
-            message.attachments.add(attachment.id);
+            message.attachments.add(attachmentMapper.toDto(attachment));
             message.senderId = attachmentDTO.getSenderId();
             message.organisationId = attachmentDTO.getOrganisationId();
             message.recipientId = attachmentDTO.getRecipientId();
+            message.content = ""; // Attachment message has empty content
             message.timestamp = Instant.now();
             message.persist();
 
