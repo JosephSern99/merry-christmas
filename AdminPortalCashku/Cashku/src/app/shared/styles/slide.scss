@@ -1,0 +1,94 @@
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 34px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0.625rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #BABABA;
+    -webkit-transition: .4s;
+    transition: .4s;
+    width:2.5rem;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 1.5rem;
+    width: 1.5rem;
+    left: -4px;
+    bottom: -2px;
+    background-color: #F0F0F0;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #C1E895;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(30px);
+    -ms-transform: translateX(30px);
+    transform: translateX(30px);
+    background-color: #5BA803;
+    box-shadow: #e7e7e7 0 3px 16px;
+}
+
+/*------ ADDED CSS ---------*/
+.on {
+    display: none;
+}
+
+.on, .off {
+    color: #364045;
+    position: absolute;
+    /*transform: translate(-50%,-50%);
+    top: 50%;*/
+    margin: 0.58rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.on {
+    left: 63%;
+}
+
+.off {
+    left: 63%;
+}
+
+input:checked + .slider .on {
+    display: block;
+}
+
+input:checked + .slider .off {
+    display: none;
+}
+
+/*--------- END --------*/
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 0.688rem;
+    height: 1.188rem;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}

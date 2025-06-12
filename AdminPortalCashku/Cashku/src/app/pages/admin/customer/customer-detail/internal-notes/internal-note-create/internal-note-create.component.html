@@ -1,0 +1,103 @@
+<div class="listing-popup-page-container edit-page-container p-0">
+    <div class="row breadcrumb-container mb-4">
+        <div class="col-8">
+            <app-planner-note-breadcrumb [uiBreadcrumbs]="getBreadcrumbs()" *ngIf="templateForRole === 'admin'"></app-planner-note-breadcrumb>
+            <ng-container *ngIf="templateForRole === 'advisor'">
+                <app-listing-popup-breadcrumb *ngIf="isSingleCustomer && customerDetail" [replace]="{customerName: customerDetail.fullname}"
+                    icon="/assets/images/icon_advisor_note@2x.png">
+                </app-listing-popup-breadcrumb>
+                <app-listing-popup-breadcrumb *ngIf="!isSingleCustomer" [replace]="{customerName: ''}"
+                    icon="/assets/images/icon_advisor_note@2x.png">
+                </app-listing-popup-breadcrumb>
+            </ng-container>
+        </div>
+    </div>
+    <div class="title-agmo-form">
+        <div class="page-title">Create Internal Note</div>
+    </div>
+
+    <div class="title-divider"></div>
+
+    <form *ngIf="editForm" class="agmo-form" (ngSubmit)="onSubmit()" [formGroup]="editForm" [class.show-error]="showFormError">
+        <div class="row mb-4">
+            <div class="col-12">
+                <label>Title:</label>
+                <input formControlName="title" type="text" class="form-control agmo-input note-input" required  maxlength="255">
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label>Description:</label>
+            <textarea formControlName="description" class="form-control agmo-input"></textarea>
+        </div>
+
+        <div class="mb-4" *ngIf="isSingleCustomer && customerDetail">
+            <label>Customer:</label>
+            <input type="text" class="form-control note-input" readonly [value]="customerDetail.fullname">
+        </div>
+
+        <div class="mb-4" *ngIf="!isSingleCustomer && allAssignableCustomers.length > 0">
+            <label>Customer:</label>
+            <mat-form-field class="customer-form-field w-100" appearance="outline">
+                <mat-select [formControl]="customerMultiControl" placeholder="Search Customer"
+                    panelClass="search-customer-panel-class" [multiple]="true" #multiSelect
+                    (openedChange)="updateSelection($event)">
+                    <mat-option>
+                        <ngx-mat-select-search [formControl]="customerMultiFilterCtrl"
+                            [placeholderLabel]="'Search'"
+                            [noEntriesFoundLabel]="'No Matching Result Found'">
+                        </ngx-mat-select-search>
+                    </mat-option>
+
+                    <div class="container-fluid bg-light py-3" *ngIf="isSearching">
+                        <mat-progress-bar mode="query"></mat-progress-bar>
+                    </div>
+
+                    <mat-option class="font-weight-bold" value="all"
+                        [disabled]="allAssignableCustomers.length === selectedCustomers.length"
+                        *ngIf="customerList.length > 0 && customerMultiFilterCtrl.value === ''">
+                        All Customers
+                    </mat-option>
+
+                    <mat-option class="font-weight-bold"
+                        [disabled]="isEndorsedCustomer(customer.id)"
+                        *ngFor="let customer of customerList"
+                        placeholder="Choose Customer"
+                        [value]="customer.id">
+                        {{customer.fullname || '-'}}
+                    </mat-option>
+                </mat-select>
+                <mat-icon matSuffix>
+                    <img class="dropdown-icon" src="/assets/images/arrow_down_grey@2x.png">
+                </mat-icon>
+            </mat-form-field>
+
+            <div>
+                <div class="d-flex align-items-center flex-wrap" *ngIf="selectedCustomers.length > 0">
+                    <div class="py-2" *ngFor="let cust of selectedCustomers; let i = index">
+                        <div class="d-flex align-items-center selected-customer mr-3"
+                            [ngClass]="cust.status === EndorseStatusType.Endorsed ? 'endorsed' : 'not-endorsed'">
+                            <div class="d-flex align-items-center">
+                                <div class="mr-3">{{(cust.fullname || cust.email) || '-' }}</div>
+                                <img *ngIf="cust.status !== EndorseStatusType.Endorsed" class="remove-icon" src="/assets/images/reject_circle_red.png"
+                                    (click)="removeCustomer(i)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 text-right">
+                <button type="button" (click)="onSubmit(true)" mat-button class="primary darkblue opacity-4 btn-advisor-portal mr-3">
+                    Save as draft
+                </button>
+
+                <button type="submit" mat-button class="primary darkblue btn-advisor-portal">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

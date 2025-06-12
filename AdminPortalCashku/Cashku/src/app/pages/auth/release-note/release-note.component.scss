@@ -1,0 +1,22 @@
+.release-note-version, .release-divider {
+    margin-bottom: 20px;
+}
+
+.no-margin-reset {
+    font-size: 16px;
+    padding-left: 50px;
+
+    .title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-left: -40px;
+    }
+
+    .newly {
+        color: red;
+
+        &:after {
+            content: ' (New)';
+        }
+    }
+}

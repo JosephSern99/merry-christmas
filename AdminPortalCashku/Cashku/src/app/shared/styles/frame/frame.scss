@@ -1,0 +1,48 @@
+.mat-sidenav-container {
+    .left-frame {
+        background-color: #08197C;
+        padding-top: 32px;
+        top: var(--top-frame-height) !important;
+        width: var(--left-frame-width);
+    }
+
+    .mat-sidenav-content {
+        background-color: var(--light-blue);
+        box-shadow: 1px 1px 9px 0px rgb(0 0 0 / 50%) inset;
+        height: calc(100vh - var(--top-frame-height));
+        padding: 32px 16px 0;
+    }
+}
+
+.mat-toolbar {
+    background-color: white;
+    height: var(--top-frame-height);
+    padding: 0 22px !important;
+
+    .left-frame-controller {
+        cursor: pointer;
+        width: 200px;
+
+        img {
+            width: 100%;
+        }
+
+        &.opened {
+            .icon-close {
+                display: block;
+            }
+
+            .icon-open {
+                display: none;
+            }
+        }
+
+        .icon-open {
+            display: block;
+        }
+
+        .icon-close {
+            display: none;
+        }
+    }
+}

@@ -1,0 +1,37 @@
+.top-space {
+    margin-top: 2rem;
+}
+
+.three-dot-menu:after {
+    content: '\2807';
+    font-size: 20px;
+}
+
+.mat-menu-item {
+    .dark-blue-text {
+        color: var(--dark-blue);
+    }
+
+    .red-text {
+        color: red;
+    }
+}
+
+.status-box {
+    border-radius: 20px;
+    font-size: 10px;
+    font-family: 'Open Sans';
+    text-align: center;
+    width: max-content;
+
+}
+
+.completed {
+    background-color: #E4FAF6;
+    color: #0A8D78;
+}
+
+.pending {
+    background-color: #FFEEE8;
+    color: #DD6231;
+}

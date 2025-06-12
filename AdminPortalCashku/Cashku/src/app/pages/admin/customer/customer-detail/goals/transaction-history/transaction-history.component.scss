@@ -1,0 +1,19 @@
+.table-container {
+    overflow-x: auto;
+
+    .agmo-table {
+        min-width: 1500px;
+    }
+
+    .transparent-header-bg {
+        ::ng-deep .mat-header-cell {
+            background-color: transparent;
+        }
+    }
+}
+
+.percentage {
+    color: #982828;
+    font-size: 11px;
+    font-weight: 700;
+}

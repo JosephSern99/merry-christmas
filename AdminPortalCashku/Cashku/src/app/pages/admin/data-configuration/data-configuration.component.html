@@ -1,0 +1,65 @@
+<div class="listing-page">
+    <div class="row title-container mb-5">
+        <div class="col-12 page-title">DATA CONFIGURATION</div>
+    </div>
+
+    <div class="row title-container my-4">
+        <h5 class="col-12 font-weight-bold">Cashku Save Fund - Return Rate Configuration</h5>
+    </div>
+
+    <ng-container *ngIf="saveFundList">
+        <div *ngFor="let list of saveFundList" class="save-fund-list-row d-flex justify-content-between clickable"
+        >
+            <a [routerLink]="[ 'return-rate-detail', list.easeRename_dclmId ]">
+            {{list.easeRename_dclmFundName}}
+            <img class="rotate" src="/assets/images/arrow_down_grey@2x.png">
+            </a>
+        </div>
+    </ng-container>
+
+    <div class="row title-container my-4">
+        <h5 class="col-12 font-weight-bold">Kakitangan Image Configuration</h5>
+    </div>
+
+    <div class="img-upload-row d-flex justify-content-between clickable">
+        <a [routerLink]="[ 'kt-image-edit' ]">
+        Upload Image
+        <img class="rotate" src="/assets/images/arrow_down_grey@2x.png">
+        </a>
+    </div>
+
+    <!-- <div class="row title-container my-4">
+        <h5 class="col-12 font-weight-bold">Fund Details & Documentation</h5>
+    </div>
+
+    <div>
+        <mat-table matSort class="agmo-table" [dataSource]="listingDataSource"
+        (matSortChange)="onSortChange($event)">
+            <ng-container matColumnDef="easeRename_dclmFundName">
+                <td mat-cell *matCellDef="let fund" class="fund-list-row">
+                    <div class="d-flex justify-content-between clickable"
+                    [routerLink]="[ 'fund-doc-detail', fund.easeRename_dclmId ]">
+                        {{fund.easeRename_dclmFundName}}
+                        <img class="rotate" src="/assets/images/arrow_down_grey@2x.png">
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [length]="pagination.length" [pageSize]="pagination.pageSize"
+        [pageSizeOptions]="pagination.pageSizeOptions" (page)="onPaginationChange($event)"></mat-paginator>
+    </div> -->
+
+    <!-- This is required for the Popup page to overlay the Listing page. -->
+    <div class="listing-popup-page" [class.show]="isDetailPopupShow">
+        <!-- This spinner or loading button is to indicate popup page is loading. -->
+        <div class="center">
+            <mat-spinner></mat-spinner>
+        </div>
+
+        <!-- Popup page contain is render within here. -->
+        <router-outlet (activate)="onOutletActivate()" (deactivate)="onOutletDeactivate($event)"></router-outlet>
+    </div>
+</div>

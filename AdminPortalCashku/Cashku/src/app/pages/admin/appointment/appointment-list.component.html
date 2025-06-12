@@ -1,0 +1,124 @@
+<!-- This is skeleton HTML required for the Listing page. -->
+<div class="listing-page">
+
+    <div class="row title-container mb-4">
+        <div class="col-8 page-title">APPOINTMENT</div>
+    </div>
+
+    <div class="row filter-container mb-4">
+        <div class="col-6">
+            <mat-form-field class="agmo-search-label-container">
+                <mat-label class="agmo-search-mini-label">Search By</mat-label>
+                <input matInput type="text" class="agmo-search-label" value="Customer Name" readonly>
+            </mat-form-field>
+            <mat-form-field class="agmo-search-container" >
+                <input matInput type="text" class="agmo-search-label" placeholder="Search" [formControl]="searchBarFormControl">
+            </mat-form-field>
+        </div>
+        <div class="col-4">
+            <div [formGroup]="filterFormGroup">
+            <mat-form-field class="agmo-dropdown-container" >
+                <mat-label class="agmo-dropdown-mini-label">Appointment Status</mat-label>
+                <mat-select class="agmo-dropdown-content" formControlName="appointmentStatus">
+                    <mat-option *ngFor="let status of AppointmentStatus | enumToArray" [value]="status.value"
+                    class="pending-option">{{status.label}}</mat-option>
+                  </mat-select>
+            </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+    <div class="row contain-container">
+        <div class="col-12">
+            <mat-table matSort class="agmo-table" [dataSource]="listingDataSource" (matSortChange)="onSortChange($event)">
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef>No.</th>
+                    <td mat-cell *matCellDef="let customer">{{customer.index}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="fullname">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell class="clickable" *matCellDef="let customer">
+                        <a [routerLink]="['detail', customer.id]">
+                            {{customer.fullname || '-'}}
+                        </a>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef>Email</th>
+                    <td mat-cell *matCellDef="let customer">{{customer.email}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="fullPhoneNumber">
+                    <th mat-header-cell *matHeaderCellDef>Phone No.</th>
+                    <td mat-cell *matCellDef="let customer">{{customer.fullPhoneNumber}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="advisorName">
+                    <th mat-header-cell *matHeaderCellDef>Advisor</th>
+                    <td mat-cell class="clickable" *matCellDef="let customer">{{customer.advisorName}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="requestedStep">
+                    <th mat-header-cell *matHeaderCellDef>Requested Step</th>
+                    <td mat-cell *matCellDef="let customer">{{AppointmentType[customer.appointmentType]}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="requestedTime">
+                    <th mat-header-cell  *matHeaderCellDef>Requested Time</th>
+                    <td mat-cell *matCellDef="let customer">{{customer.createdAt | date:'DD-MM-YYYY HH:mm'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell  *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let customer">
+                        <div  class="status-wrapper pointer" [matMenuTriggerFor]="menu"
+                        [ngClass]="customer.appointmentStatus === AppointmentStatus.Pending ? 'status-pending' : customer.appointmentStatus === AppointmentStatus.Approved ? 'status-approve' : 'status-cancel'">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>{{AppointmentStatus[customer.appointmentStatus]}}</div>
+                                <img class="dropdown-icon" src="assets/images/arrow_down_grey@2x.png" alt="arrow down">
+                            </div>
+                        </div>
+                        <mat-menu #menu="matMenu">
+                            <div mat-menu-item (click)="appointmentUpdateStatus(customer.id, AppointmentStatus.Approved)">
+                                <span>Approved</span>
+                            </div>
+                            <div mat-menu-item (click)="appointmentUpdateStatus(customer.id, AppointmentStatus.Cancel)">
+                                <span>Cancel</span>
+                            </div>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <ng-container matColumnDef="loading">
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+                        <mat-progress-bar mode="query"></mat-progress-bar>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="noData">
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="no-data">No data</td>
+                </ng-container>
+
+                <tr class="no-data" mat-footer-row *matFooterRowDef="['loading']" [class.show]="isListingLoading"></tr>
+                <tr class="no-data" mat-footer-row *matFooterRowDef="['noData']" [class.show]="isListEmpty()"></tr>
+            </mat-table>
+
+            <mat-paginator [length]="pagination.length" [pageSize]="pagination.pageSize" [pageSizeOptions]="pagination.pageSizeOptions" (page)="onPaginationChange($event)"></mat-paginator>
+        </div>
+    </div>
+        <!-- This is required for the Popup page to overlay the Listing page. -->
+        <div class="listing-popup-page" [class.show]="isDetailPopupShow">ListingPopupBreadcrumbModule
+            <!-- This spinner or loading button is to indicate popup page is loading. -->
+            <div class="center">
+                <mat-spinner></mat-spinner>
+            </div>
+
+            <!-- Popup page contain is render within here. -->
+            <router-outlet (activate)="onOutletActivate()" (deactivate)="onOutletDeactivate($event)"></router-outlet>
+        </div>
+
+</div>

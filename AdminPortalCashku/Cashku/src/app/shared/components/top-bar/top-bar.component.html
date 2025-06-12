@@ -1,0 +1,20 @@
+<div class="top-toolbar row align-items-center">
+    <div class="col-12 text-right">
+        <div class="profile-menu-toggler" [matMenuTriggerFor]="profileMenu">
+            <div class="name">{{getName()}}</div>
+            <div class="email">{{role}}</div>
+            <div class="triangle face-down stick-right"></div>
+        </div>
+
+        <mat-menu class="profile-menu" #profileMenu="matMenu">
+            <div mat-menu-item class="menu-item" *ngIf="role !== 'verifier'">
+                <span class="menu-label" > <a [routerLink]="(role === 'admin') ? ['/dashboard', 'account-settings'] : ['/advisor-customer', 'account-settings-advisor']">Account Settings
+
+                </a></span>
+            </div>
+            <div mat-menu-item class="menu-item" (click)="logOut()">
+                <span class="menu-label logout">Logout</span>
+            </div>
+        </mat-menu>
+    </div>
+</div>

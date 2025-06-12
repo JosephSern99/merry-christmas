@@ -1,0 +1,24 @@
+<div class="login-container">
+    <div class="line-left"></div>
+
+    <div class="line-right">
+        <section class="login-form">
+            <div class="logo-login">
+                <img src="/assets/images/logo_cashku@2x.png" height="85" width="auto" />
+            </div>
+            <form [formGroup]="form" class="agmo-form" [class.show-error]="showError" (submit)="submitForm()">
+                <div class="mt-5">
+                    <div class="mb-1">Email:</div>
+                    <input placeholder="" class="input-lg agmo-input" formControlName="email">
+                    <div class="mt-5 mb-1">Password:</div>
+                    <input placeholder="" class="input-lg agmo-input" formControlName="password"
+                        [type]="hide ? 'password' : 'text'" type="password">
+                    <div class="form-group text-right mt-3">
+                        <a href="#" (click)="forgotPassword()" class="forgot-password">Forgot password</a>
+                    </div>
+                    <button type="submit" class="btn btn-action">Log In</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

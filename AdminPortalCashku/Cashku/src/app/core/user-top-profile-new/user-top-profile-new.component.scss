@@ -1,0 +1,92 @@
+.img-profile {
+    width: 102px;
+}
+
+.information {
+    display: inline-block;
+    margin-left: 24px;
+}
+
+.check-logo {
+    width: 28px;
+    margin-top: -3px;
+}
+
+.text-register {
+    color: #03A58C;
+    font-size: 11px;
+    font-weight: lighter;
+    margin-left: 0.5rem;
+}
+
+.text-unregister {
+    @extend .text-register;
+    color: #DD0A0A;
+}
+
+.advisor-container {
+    border: solid 1px #f5e3ff;
+    border-radius: 4px;
+    background-color: #fefdff;
+    color: black;
+    padding: 0.3rem;
+    position: relative;
+
+    .advisor-title {
+        white-space: nowrap
+    }
+
+    .v-line {
+        border-left: 1px solid #f5e3ff;
+        height: 20px;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .advisor-name {
+        color: #8524D1;
+        font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .edit-pen-icon {
+        top: 6px;
+        right: 6px;
+        cursor: pointer;
+    }
+}
+
+.plan-container {
+    border: solid 1px #E9F8F5;
+    border-radius: 0px 14px 14px 0px;
+    background-color: #E9F8F5;
+    padding: 1.2rem;
+    font-family: 'Open Sans';
+    color: #03A58C;
+    margin-top: 1rem;
+
+    .plan-title {
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .plan-date {
+        color: #747474;
+        font-size: 12px;
+    }
+
+}
+
+.plan-logo {
+    width: 87.21px;
+    height: auto;
+    position: absolute;
+    margin-left: -4rem;
+}
+
+.copy-container {
+    background-image: url(/assets/images/icon_copy_purple@2x.png);
+    border-left: none;
+}

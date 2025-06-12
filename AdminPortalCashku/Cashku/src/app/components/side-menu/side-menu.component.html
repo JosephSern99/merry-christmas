@@ -1,0 +1,16 @@
+<div class="side-menu" [class.is-show]="isShowSideMenu">
+  <div class="main-logo">
+
+  </div>
+  <div class="menu-holder">
+    <div class="main-menu-panel" *ngFor="let menu of menuList">
+      <!--no submenu-->
+      <a class="menu-tab main-menu" *ngIf="!menu.external" [routerLink]="menu.route">
+        <i class="menu-icon fas" [class]="'fa-'"></i>
+        <img class="menu-icon fas icon-img" [src]="menu.moduleIcon">
+        <span>{{menu.moduleName}}</span>
+      </a>
+      <!---->
+    </div>
+  </div>
+</div>

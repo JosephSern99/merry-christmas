@@ -1,0 +1,32 @@
+.save-fund-list-row, .img-upload-row {
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0px 3px 6px var(--grey);
+    color: var(--black);
+    font-size: 16px;
+    margin: 10px 0px;
+    padding: 20px 18px;
+
+    .rotate {
+        transform: rotate(270deg);
+        width: 16px;
+    }
+}
+
+.fund-list-row {
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0px 3px 6px var(--grey);
+    margin: 10px 0px;
+
+    .clickable {
+        color: var(--black);
+        font-size: 16px;
+        padding: 20px 0px;
+    }
+
+    .rotate {
+        transform: rotate(270deg);
+        width: 16px;
+    }
+}

@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-4 mb-3 information">
+        <div class="detail-label">Direct Debit Status</div>
+        <div class="detail-data" [ngClass]="getDirectDebitStatus().cssClass">{{ getDirectDebitStatus().label }}</div>
+    </div>
+    <div class="col-8 mb-3 information">
+        <div class="detail-label">eMandate Effective Date</div>
+        <div class="detail-data">
+            {{ !details.effectiveDate ? '-' : details.effectiveDate | date : 'DD-MM-YYYY' }}
+        </div>
+    </div>
+    <div class="col-4 mb-3 information">
+        <div class="detail-label">Direct Debit Amount</div>
+        <div class="detail-data">
+            {{ !details.directDebitAmount ? '-' : details.directDebitAmount | currency: 'MYR': 'RM ' }}
+        </div>
+    </div>
+    <div class="col-4 mb-3 information">
+        <div class="detail-label">eMandate Expiry Date</div>
+        <div class="detail-data">
+            {{ !details.expiryDate ? '-' : details.expiryDate | date : 'DD-MM-YYYY' }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+.copy-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-left: 1px solid #ced4da;
+    border-right: 1px solid transparent;
+    width: 2rem;
+    height: 100%;
+    background-image: url(/assets/images/icon_copy_blue@2x.png);
+    background-size: 1.25rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.agmo-tooltip {
+    position: absolute;
+    bottom: calc(100% + .125rem);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: .125rem .375rem 0;
+    background-color: rgba(#08197C, .8);
+    color: white;
+    border-radius: .25rem;
+    font-size: .75rem;
+    transition: 0.1s opacity ease-in;
+    white-space: nowrap;
+    opacity: 0;
+
+    &.show {
+        opacity: .8;
+    }
+}
+
+.icon-status {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 24px;
+    margin-right: 8px;
+    padding: 0;
+    text-align: center;
+    width: 24px;
+}
+
+.red-arrow {
+    background-image: url("/assets/images/withdrawal_red@2x.png");
+}
+
+.green-arrow {
+    background-image: url("/assets/images/deposit_green@2x.png");
+}
+
+.portfolio-status {
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+}
+
+.green {
+    background: #e4faf6;
+    color: #0a8d78;
+}
+
+.purple {
+    background: #f5eefb;
+    color: #b026ff;
+}
+
+.red {
+    background: #fceded;
+    color: #fa0505;
+}
+
+.yellow {
+    background: #fffaea;
+    color: #ffc400;
+}

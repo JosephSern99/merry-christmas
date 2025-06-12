@@ -1,0 +1,94 @@
+.agmo-form {
+    background-color: white;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 8px 0 rgba(170, 170, 170, 0.2), 0 4px 8px 0 rgba(143, 143, 143, 0.19);
+    padding: 20px;
+
+    .agmo-input {
+        outline: none;
+
+        &:focus {
+            border: 1px solid var(--grey) !important;
+        }
+    }
+}
+
+.title-agmo-form {
+    background-color: white;
+    border-radius: 10px 10px 0 0;
+    box-shadow: -4px 0 8px 0 rgba(170, 170, 170, 0.2), 4px 0 8px 0 rgba(143, 143, 143, 0.19);
+    padding: 16px;
+
+    .page-title {
+        color: black;
+        font-size: 14px;
+        font-weight: bold;
+    }
+}
+
+.agmo-form.show-error {
+    .agmo-input.ng-invalid {
+        border: 1px solid red;
+    }
+
+    .agmo-error-message {
+        opacity: 1;
+    }
+
+    .ng-invalid {
+        .mat-form-field-outline {
+            .mat-form-field-outline-end,
+            .mat-form-field-outline-start {
+                border-width: 1px !important;
+                color: crimson;
+            }
+        }
+    }
+
+    .mat-error {
+        opacity: 1;
+    }
+}
+
+.agmo-error-message {
+    opacity: 0;
+}
+
+.mat-select-arrow-wrapper {
+    position: relative;
+    right: 15px;
+    top: -4px;
+}
+
+.portfolio-select-field .mat-select-arrow-wrapper {
+    top: 0px;
+}
+
+.show-form-error .ng-invalid {
+    border: 1px solid red;
+}
+
+.filter-form-field {
+    .mat-select-arrow {
+        border: none;
+    }
+
+    .dropdown-icon {
+        height: 1.2rem;
+        margin-bottom: 8px;
+    }
+}
+
+.btn-advisor-portal {
+    border-radius: 8px !important;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    padding: 0.3rem 2rem !important;
+}
+
+.primary-submit-button {
+    border-radius: 5px;
+    font-weight: bold;
+    height: 40px;
+    width: 150px;
+}

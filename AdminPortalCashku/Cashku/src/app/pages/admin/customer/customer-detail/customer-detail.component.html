@@ -1,0 +1,86 @@
+<!-- This is skeleton HTML required for the Popup page. -->
+<div class="listing-popup-page-container p-0" *ngIf="detail">
+    <div class="details-wrapper">
+        <ng-container *ngIf="templateForRole === 'advisor';else adminHeader">
+            <div class="row breadcrumb-container mx-4">
+                <div class="col-8">
+                    <app-listing-popup-breadcrumb [replace]="{customerName: detail.fullname}">
+                    </app-listing-popup-breadcrumb>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #adminHeader>
+            <div class="row breadcrumb-container mx-4">
+                <div class="col-8">
+                    <app-listing-popup-breadcrumb [replace]="{customerName: detail.fullname}">
+                    </app-listing-popup-breadcrumb>
+                </div>
+            </div>
+        </ng-template>
+
+        <app-user-top-profile-new
+            [advisorName]="detail.advisorName"
+            [advisoryPlan]="detail.advisoryPlan"
+            [email]="detail.email"
+            [fullName]="detail.fullname"
+            [fullPhoneNumber]="detail.fullPhoneNumber"
+            [profilePic]="detail.easyRename_userPicture"
+            [registrationStatus]="detail.registerStep"
+            [registeredAs]="detail.registeredAs"
+            [registerStep]="detail.registerStep"
+            [advisorId]="detail.advisorId"
+            (isUpdateAdvisorClicked)="updateAdvisor($event)">
+
+        </app-user-top-profile-new>
+
+        <div class="tab-container mt-4">
+            <div class="col-12 text-right">
+                <div class="mr-4"></div>
+                <ng-template [ngIf]="storageService.roles === 'superadmin' && selectedTab === DetailSubTab.BasicInfo" >
+                    <button mat-button class="secondary darkblue mr-3" >
+                        <a [routerLink]="['edit']">Edit </a></button>
+                    <button mat-button class="secondary red mr-3" (click)="suspendCustomer(detail.registerStep !== CustomerRegistrationStatus.Suspended)">
+                        {{ detail.registerStep !== CustomerRegistrationStatus.Suspended ? 'Suspend' : 'Unsuspend' }}
+                    </button>
+                    <button mat-button class="secondary mild-grey mr-3" (click)="resetPassword()">Reset Password</button>
+                    <button mat-button class="secondary red" (click)="removeCustomer()">Delete</button>
+                </ng-template>
+                <ng-template [ngIf]="storageService.roles === 'superadmin' && selectedTab === DetailSubTab.InternalNotes">
+                    <button mat-button class="primary darkblue btn-advisor-portal" >
+                        <a [routerLink]="['internal-notes/create-note']">Create Note </a></button>
+                </ng-template>
+                <ng-template [ngIf]="storageService.roles === 'admin'">
+                    <button mat-button class="primary darkblue btn-advisor-portal" >
+                        <a [routerLink]="selectedTab !== DetailSubTab.InternalNotes ? ['planner-notes/create'] : ['internal-notes/create']">
+                        Create Note
+                        </a>
+                    </button>
+                </ng-template>
+            </div>
+
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <nav mat-tab-nav-bar>
+                        <a mat-tab-link [routerLink]="['basic-info']"
+                            [active]="selectedTab === DetailSubTab.BasicInfo">Basic
+                            Info</a>
+                        <a mat-tab-link [routerLink]="['portfolio']"
+                            [active]="selectedTab === DetailSubTab.Portfolio">Portfolio</a>
+                        <a mat-tab-link [routerLink]="['goals/details']" [active]="selectedTab === DetailSubTab.Goals">Goals</a>
+                        <a mat-tab-link [routerLink]="['funds']" [active]="selectedTab === DetailSubTab.Funds">Funds</a>
+                        <a mat-tab-link [routerLink]="['planner-notes']"
+                            [active]="selectedTab === DetailSubTab.PlannerNotes">Advisor Notes</a>
+                        <a mat-tab-link [routerLink]="['internal-notes']"
+                            [active]="selectedTab === DetailSubTab.InternalNotes">Internal Notes</a>
+                        <!-- <a mat-tab-link>Joint Account</a>
+                        <a mat-tab-link>Next of Kin</a> -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="body">
+        <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
+    </div>
+</div>

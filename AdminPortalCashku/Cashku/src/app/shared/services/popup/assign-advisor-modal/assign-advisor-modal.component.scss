@@ -1,0 +1,65 @@
+.advisor-card {
+    position: relative;
+    padding: 24px 22px;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0.875rem;
+}
+
+.label {
+    color: #747474;
+}
+
+.btn-close {
+    display: flex;
+    border: 0;
+    background-color: transparent;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+
+.inputs-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 14px;
+    margin-bottom: 52px;
+
+    .input-field, .select-field {
+        height: 40px;
+        padding: 8px 10.5px;
+    }
+
+    .input-field {
+        font-size: 13px;
+    }
+
+    .select-field  {
+        ::ng-deep .mat-select-arrow-wrapper {
+            position: static;
+        }
+    }
+
+    .checkbox-field {
+        ::ng-deep .mat-checkbox-frame {
+            border: 1px solid #E5E5E5;
+        }
+    }
+}
+
+.actions-container {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 1.125rem;
+
+    button {
+        padding: 0 2.75rem;
+    }
+}
+
+.option-header {
+    background-color: #f8f8f8;
+}

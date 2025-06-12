@@ -1,0 +1,41 @@
+.agmo-dropdown-container  {
+    background-color: white;
+    border: 2px solid lightgrey;
+    padding-bottom: 0;
+    border-radius: 5px;
+    border-top-left-radius: 5px;
+
+    .mat-form-field-wrapper {
+        padding-bottom: 0rem !important;
+        margin: 0 6px;
+
+        .agmo-dropdown-mini-label {
+            color: grey;
+            display: block;
+            font-size: 12px;
+            margin: 10px 0 0 6px;
+        }
+
+        .agmo-dropdown-content {
+            color: var(--dark-blue);
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0 0 0 6px;
+        }
+
+        .dropdown:focus-within .agmo-dropdown-content {
+            display: block;
+        }
+    }
+
+    .mat-select-value {
+        color: #8524D1;
+    }
+}
+
+.pending-option {
+    .mat-option-text {
+        color: #8524D1;
+        font-weight: 600;
+    }
+}

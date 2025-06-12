@@ -1,0 +1,68 @@
+<div *ngIf="paymentData" class="container">
+    <div class="row text-center mt-5">
+        <div class="col-12 title-text">
+            Payment Receipt
+        </div>
+
+        <div class="col-12 mt-5">
+            <div>
+                <span class="date-text">{{paymentData.createdAt}}</span>
+            </div>
+        </div>
+
+        <hr class="border horizontal-line">
+
+        <div class="col-12 mt-2">
+            <div>
+                <span class="label-title">Amount</span>
+                <span class="ml-3 label-value">RM{{paymentData.amount}}</span>
+            </div>
+        </div>
+
+        <hr class="border horizontal-line">
+
+        <div class="col-12 mt-2">
+            <div>
+                <span class="label-title">FPX Transaction ID</span>
+                <span class="ml-3 label-value">{{paymentData.transactionId}}</span>
+            </div>
+        </div>
+
+        <hr class="border horizontal-line">
+
+        <div class="col-12 mt-2">
+            <div>
+                <span class="label-title">Seller Order No</span>
+                <span class="ml-3 label-value">{{paymentData.orderNo}}</span>
+            </div>
+        </div>
+
+        <hr class="border horizontal-line">
+
+        <div class="col-12 mt-2">
+            <div>
+                <span class="label-title">Bank</span>
+                <span class="ml-3 label-value">{{paymentData.bankName}}</span>
+            </div>
+        </div>
+
+        <hr class="border horizontal-line">
+
+        <div class="col-12 mt-2">
+            <div>
+                <span class="label-title">Status</span>
+                <span class="ml-3 label-status">{{paymentData.transactionStatus}}</span>
+            </div>
+        </div>
+
+        <hr class="border horizontal-line">
+
+        <div class="col-12 mt-2">
+            <div>
+                <span class="label-title">Remarks</span>
+                <span class="ml-3 label-value font-weight-bold">{{paymentData.fpxresponseMessage}}</span>
+            </div>
+        </div>
+
+    </div>
+</div>

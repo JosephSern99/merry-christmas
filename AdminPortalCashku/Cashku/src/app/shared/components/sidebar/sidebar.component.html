@@ -1,0 +1,13 @@
+<div class="sidebar">
+    <div class="menu" *ngFor="let menuItem of menus">
+        <a [routerLink]="menuItem.url" [class.active]="isActiveMenu(menuItem)">
+        <img src="{{menuItem.icon}}">
+        <span class="title">{{menuItem.name}}</span>
+        </a>
+    </div>
+
+    <div class="version" [class.disabled-production]="isProduction">
+        <a [routerLink]="['/release-note']">Version {{APP_VERSION}}
+        </a>
+    </div>
+</div>

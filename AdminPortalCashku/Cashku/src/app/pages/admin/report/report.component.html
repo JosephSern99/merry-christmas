@@ -1,0 +1,73 @@
+<div class="listing-page">
+    <div class="row title-container mb-4">
+        <div class="col-8 page-title">REPORT</div>
+    </div>
+
+    <form [formGroup]="reportForm">
+        <div class="report-view mt-3 row py-4">
+            <div class="col">
+                <p class="pl-4 pt-4 font-size-18 font-weight-bold">Client Report</p>
+                <p class="pl-4 secondary-data">Report for client profile, portfolio, goals, and advisor notes</p>
+            </div>
+            <div class="mr-5 mb-2 align-self-center p-4">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button class="btn-all" (click)="addEmail(ReportType.Customer, true)">All</button>
+                    </div>
+                    <app-datetimepicker class="p-0 form-control" [selectMode]="'range'" formControlName="customerDate"
+                        [pickerType]="'calendar'" [placeholder]="'DD/MM/YY - DD/MM/YY'" (clear)="clearCustomerDate()"
+                        [maxDate]="curDate" (dateTimeValueChange)="reportDateOnChange($event, ReportType.Customer)">
+                    </app-datetimepicker>
+                </div>
+            </div>
+            <button mat-button [ngClass]="!customerStartDate || !customerEndDate ? 'disabled' : ''"
+                (click)="addEmail(ReportType.Customer)"
+                class="primary darkblue align-self-center mr-5 mb-3">Export</button>
+        </div>
+
+        <div class="report-view mt-3 row py-4">
+            <div class="col">
+                <p class="pl-4 pt-4 font-size-18 font-weight-bold">Advisor Report</p>
+                <p class="pl-4 secondary-data">Report for advisor profile, client, and advisor notes</p>
+            </div>
+            <div class="mr-5 align-self-center p-4">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button class="btn-all"  (click)="addEmail(ReportType.Advisor, true)">All</button>
+                    </div>
+                    <app-datetimepicker class="p-0 form-control" [selectMode]="'range'" formControlName="advisorDate"
+                        [pickerType]="'calendar'" [placeholder]="'DD/MM/YY - DD/MM/YY'" (clear)="clearAdvisorDate()"
+                        [maxDate]="curDate" (dateTimeValueChange)="reportDateOnChange($event, ReportType.Advisor)">
+                    </app-datetimepicker>
+                </div>
+            </div>
+            <button mat-button (click)="addEmail(ReportType.Advisor)"
+                [ngClass]="!advisorStartDate || !advisorEndDate ? 'disabled' : ''"
+                class="primary darkblue align-self-center mr-5 mb-3">Export</button>
+        </div>
+
+        <div class="report-view mt-3 row py-4">
+            <div class="col">
+                <p class="pl-4 pt-4 font-size-18 font-weight-bold">Transaction Report</p>
+                <p class="pl-4 secondary-data">Report for transaction ID, user name, fund name, latest NAV price, year
+                    to date (YTD), launch price, and launch date</p>
+            </div>
+            <div class="mr-5 align-self-center p-4">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button class="btn-all"  (click)="addEmail(ReportType.Transactions, true)">All</button>
+                    </div>
+                    <app-datetimepicker class="p-0 form-control" [selectMode]="'range'"
+                        formControlName="transactionDate" [pickerType]="'calendar'"
+                        [placeholder]="'DD/MM/YY - DD/MM/YY'" (clear)="clearTransactionDate()" [maxDate]="curDate"
+                        (dateTimeValueChange)="reportDateOnChange($event, ReportType.Transactions)">
+                    </app-datetimepicker>
+                </div>
+            </div>
+            <button mat-button (click)="addEmail(ReportType.Transactions)"
+                [ngClass]="!transactionStartDate || !transactionEndDate ? 'disabled' : ''"
+                class="primary darkblue align-self-center mr-5 mb-3">Export</button>
+        </div>
+    </form>
+
+</div>

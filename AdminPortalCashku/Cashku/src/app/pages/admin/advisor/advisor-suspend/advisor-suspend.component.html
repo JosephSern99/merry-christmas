@@ -1,0 +1,47 @@
+<div class="listing-popup-page-container edit-page-container">
+    <ng-container *ngIf="detail">
+        <div class="row breadcrumb-container mb-4">
+            <div class="col-8">
+                <app-listing-popup-breadcrumb [replace]="{advisorName: detail.fullName}" icon="/assets/images/icon_advisor@2x.png"></app-listing-popup-breadcrumb>
+            </div>
+        </div>
+        <div class="title-agmo-form">
+            <h5 class="page-title">{{ title }} ({{ detail.fullName }})</h5>
+        </div>
+        <div class="title-divider"></div>
+
+        <form class="agmo-form" [formGroup]="editForm" [class.show-error]="showFormError">
+            <label for="reason">Reason:</label>
+            <textarea formControlName="reason" id="reason" class="form-control agmo-input" rows="8" placeholder="This is because..."></textarea>
+        </form>
+
+        <section class="customers-container">
+            <h5 class="title">Customers</h5>
+            <div class="description">Please assign your customers to new advisor in order to {{ isDelete ? 'delete' : 'suspend' }} account.</div>
+
+            <button
+                matTooltip="Select 1 or more customers first"
+                [matTooltipDisabled]="customerListing?.customerSelection.hasValue() || false"
+                matTooltipPosition="after"
+                [disabled]="!customerListing?.customerSelection.hasValue()"
+                class="btn-assign"
+                matRipple
+                (click)="onAssignAdvisor()">
+                <img src="/assets/images/add_blue.svg" alt="Plus in circle icon">
+                Assign Advisor
+            </button>
+
+            <app-assign-customer-listing [newAdvisor$]="newAdvisor$"></app-assign-customer-listing>
+
+            <div class="text-right pb-5">
+                <button mat-button class="btn-submit" (click)="onSubmit()">
+                    Submit
+                </button>
+            </div>
+        </section>
+    </ng-container>
+
+    <div *ngIf="!detail" class="center">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<section class="advisor-card">
+    <div class="title">Assign Advisor</div>
+
+    <button class="btn-close" (click)="onClose()">
+        <mat-icon>close</mat-icon>
+    </button>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" [class.show-form-error]="showFormError">
+        <label class="label" for="select-list">Customers transfer to:</label>
+
+        <section class="inputs-container">
+            <mat-select *ngIf="!form.value.default" class="form-control select-field" formControlName="advisor" placeholder="Search advisor">
+                <mat-select-trigger>{{ getAdvisorFullName() }}</mat-select-trigger>
+
+                <mat-option>
+                    <ngx-mat-select-search [formControl]="searchBarFormControl" placeholderLabel="Search advisor"
+                        noEntriesFoundLabel="No advisors found" [searching]="isListingLoading"></ngx-mat-select-search>
+                </mat-option>
+
+
+                <mat-option *ngIf="(filteredAdvisors | async)?.length > 0">
+                    <div class="grid-cols-3 option-header">
+                        <div>Name</div>
+                        <div>Email</div>
+                        <div>ID</div>
+                    </div>
+                </mat-option>
+                <mat-option *ngFor="let advisor of filteredAdvisors | async" [value]="advisor">
+                    <div class="grid-cols-3">
+                        <div>{{ advisor.fullName }}</div>
+                        <div>{{ advisor.email }}</div>
+                        <div>{{ advisor.id }}</div>
+                    </div>
+                </mat-option>
+            </mat-select>
+
+            <input *ngIf="form.value.default" class="form-control input-field" [value]="getAdvisorFullName()" disabled />
+
+            <mat-checkbox class="checkbox-field" formControlName="default" color="primary">Default Advisor</mat-checkbox>
+        </section>
+
+        <section class="actions-container">
+            <button type="button" mat-button class="secondary mild-grey" (click)="onClose()">Cancel</button>
+            <button mat-button class="primary darkblue font-weight-bold">Confirm</button>
+        </section>
+    </form>
+</section>
+

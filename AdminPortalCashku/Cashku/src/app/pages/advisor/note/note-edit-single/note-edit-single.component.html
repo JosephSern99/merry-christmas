@@ -1,0 +1,53 @@
+<div class="listing-popup-page-container edit-page-container p-0">
+
+    <div class="row breadcrumb-container mb-4">
+        <div class="col-8">
+            <app-planner-note-breadcrumb [uiBreadcrumbs]="getBreadcrumbs()" *ngIf="true"></app-planner-note-breadcrumb>
+        </div>
+
+        <div class="col-4 text-right">
+            <button mat-button class="secondary purple mr-2" *ngIf="true">
+                <a [routerLink]="getBackPath()">Back
+                </a>
+            </button>
+        </div>
+    </div>
+
+    <div class="title-agmo-form">
+        <div class="page-title">{{operationLabel}} Note</div>
+    </div>
+
+    <div class="title-divider"></div>
+
+    <form *ngIf="editForm" class="agmo-form" (ngSubmit)="onSubmit()" [formGroup]="editForm" [class.show-error]="showFormError">
+        <div class="row mb-4">
+            <div class="col-12">
+                <label>Title:</label>
+                <input formControlName="title" type="text" class="form-control agmo-input note-input" required  maxlength="255">
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label>Description:</label>
+            <textarea formControlName="description" class="form-control agmo-input description-input"></textarea>
+        </div>
+
+        <div class="mb-4" *ngIf="customerDetail">
+            <label>Client:</label>
+            <input type="text" class="form-control note-input" readonly [value]="customerDetail.fullname">
+        </div>
+
+        <div class="row">
+            <div class="col-12 text-right">
+                <button type="button" (click)="onSubmit(true)" mat-button class="primary darkblue opacity-4 btn-advisor-portal mr-3">
+                    Save as draft
+                </button>
+
+                <button type="submit" mat-button class="primary darkblue btn-advisor-portal">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>

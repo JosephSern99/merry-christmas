@@ -1,0 +1,51 @@
+<div class="listing-popup-page-container edit-page-container">
+    <div class="row breadcrumb-container mb-4">
+        <div class="col-12">
+            <app-listing-popup-breadcrumb
+                [replace]="{fundName: 'Apex Dana Al-Kanz'}"
+                icon="/assets/images/data_configuration_grey@2x.png">
+            </app-listing-popup-breadcrumb>
+        </div>
+    </div>
+
+    <div class="title-agmo-form">
+        <h5 class="page-title">Edit Return Rate</h5>
+    </div>
+    <div class="title-divider"></div>
+
+    <form *ngIf="editForm" class="agmo-form" [formGroup]="editForm" [class.show-error]="showFormError">
+        <div *ngFor="let subDetail of detail">
+            <div class="mb-5">
+                <div class="row">
+                    <div class="col-12 position-relative">
+                        <div class="mb-4">
+                            <div class="font-weight-bold subtitle">{{ subDetail.section }}</div>
+                        </div>
+                    </div>
+                </div>
+
+<!--                <ng-container *ngFor="let subSection of getSubSection(subDetail.section).controls; let i = index">-->
+<!--                    <ng-container formArrayName={{subDetail.section}}>-->
+<!--                        <ng-container [formGroup]="subSection">-->
+<!--                            <div class="row mb-4">-->
+<!--                                <div class="col-12 position-relative">-->
+<!--                                    <label>{{ subDetail.data[i].title }}</label>-->
+<!--                                    <input type="text" class="form-control agmo-input" formControlName="value" digitOnly decimal="true">-->
+<!--                                    <span class="percentage-return-rate">%</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </ng-container>-->
+<!--                    </ng-container>-->
+<!--                </ng-container>-->
+            </div>
+        </div>
+
+        <div class="mt-5 row">
+            <div class="col-12 text-right">
+                <button [class.disable]="!editForm.valid" class="mat-button primary darkblue btn primary-submit-button border-0" (click)="onSubmit()">
+                    Save
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

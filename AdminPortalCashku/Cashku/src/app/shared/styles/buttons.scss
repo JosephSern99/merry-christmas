@@ -1,0 +1,152 @@
+.button-holder {
+  .button-holder-title {
+    margin-bottom: 0.714285rem;
+    color: var(--primary-text);
+    font-size: 0.9285rem;
+  }
+}
+
+.btn {
+  padding: 0;
+  border-radius: 0;
+  text-align: center;
+  line-height: 1.1em;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: top;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.1s;
+
+  &.disable {
+    opacity: 0.65;
+    pointer-events: none;
+  }
+
+  &:hover {
+    //transform: scale(0.97,0.97);
+  }
+
+  &.but-caps {
+    text-transform: uppercase;
+  }
+
+  &.but-click {
+    padding: 0.857rem 1.0714rem;
+    border-radius: 0;
+    font-size: 1rem;
+    line-height: 1.2em;
+
+    &.small {
+      padding: 0.64285rem 0.5714rem;
+      font-size: 0.857rem;
+      line-height: 1.1em;
+    }
+  }
+
+  &.but-primary {
+    background-color: var(--secondary);
+    color: #FFFFFF;
+    font-weight: 700;
+
+    &:hover {
+      background-color: var(--secondary-hover);
+    }
+
+    &.small {
+      font-weight: 500;
+    }
+  }
+
+  &.but-light {
+    background-color: var(--light);
+    color: #1c273c;
+
+    &:hover {
+      background-color: var(--light-hover);
+    }
+  }
+
+  &.but-dark {
+    background-color: var(--dark);
+    color: #FFFFFF;
+
+    &:hover {
+      background-color: var(--dark-hover);
+    }
+  }
+
+  &.but-success {
+    background-color: var(--success);
+    color: #FFFFFF;
+
+    &:hover {
+      background-color: var(--success-hover);
+    }
+  }
+
+  &.but-warning {
+    background-color: var(--warning);
+    color: #1c273c;
+
+    &:hover {
+      background-color: var(--warning-hover);
+    }
+  }
+
+  &.but-outline {
+    background-color: #FFFFFF;
+    border: 1px solid #BBBBBB;
+    color: var(--primary-text);
+    font-weight: 700;
+
+    &:focus {
+      border: 1px solid #BBBBBB !important;
+    }
+  }
+
+  &.but-submit {
+    background-color: #006977;
+    width: 12.5rem;
+    height: 3.3125rem;
+    border-radius: 0.1875rem;
+    color: #FFFFFF;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 3.3125rem;
+    text-align: center;
+  }
+
+  &.but-cancel {
+    background-color: #FFFFFF;
+    height: 3.3125rem;
+    padding: 0 0.9375rem;
+    border-radius: 0.1875rem;
+    color: #727272;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 3.3125rem;
+    text-align: center;
+
+    &:hover {
+      box-shadow: 0 1px 0.1875rem rgba(0,0,0,0.3);
+    }
+  }
+
+  &.but-icon {
+    color: var(--primary-text);
+    font-size: 1.4285rem;
+  }
+}
+
+//
+.text-link {
+  color: var(--secondary);
+  cursor: pointer;
+  display: inline-block;
+
+  &:hover {
+    color: var(--secondary-hover);
+    text-decoration: underline;
+  }
+}

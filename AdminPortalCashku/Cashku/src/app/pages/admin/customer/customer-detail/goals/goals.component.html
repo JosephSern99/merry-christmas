@@ -1,0 +1,136 @@
+<mat-progress-bar *ngIf="isLoading" class="my-5" mode="indeterminate"></mat-progress-bar>
+<div class="nested-tab-container goals-container">
+    <div class="goals-row mb-4">
+        <button *ngFor="let goal of goals; let i = index" mat-button class="mr-3 mb-3"
+            [ngClass]="i === selectedGoalIndex ? 'primary darkblue' : 'secondary darkgrey'"
+            (click)="onGoalClick(i)">
+            <span>{{GoalTypeEnum[goal.goalType]}}</span>
+            <span *ngIf="goal.goalType === GoalTypeEnum.Other"> - {{goal.goalName}}</span>
+        </button>
+        <div class="mx-auto mt-5" *ngIf="!isLoading && goals.length === 0">
+            <img src='/assets/images/placeholder_goals@2x.png' width="100px" alt="goals" />
+            <p class="goals-detail text-center mt-3">No Goals Found</p>
+        </div>
+    </div>
+
+    <mat-progress-bar [class.opacity-5]="chartIsLoading" class="mb-3 opacity-0" mode="buffer"></mat-progress-bar>
+    <div class="d-flex justify-content-between opacity-0 pb-5" [class.opacity-5]="goalFundChart">
+        <div class="container-wrapper right-container">
+            <div class="title p-3" *ngIf="selectedGoal">
+                {{GoalTypeEnum[selectedGoal.goalType]}}
+                <span *ngIf="selectedGoal.goalName">- {{selectedGoal.goalName}}</span>
+            </div>
+
+            <div class="basic-divider"></div>
+
+            <div class="mt-3">
+                <div class="my-4 d-block">
+                    <div class="my-4 d-flex flex-column align-items-center justify-content-center">
+                        <canvas id="goalFundChart">{{goalFundChart}}</canvas>
+                        <div class="text-center percentage">{{ getProgressPercentage() }}%</div>
+                    </div>
+                </div>
+
+                <div *ngIf="goalFunds">
+                    <div class="amount-container text-center py-2 mb-3">
+                        <div class="title-label">
+                            Current Total Assets <br />
+                            <i>(include amount already have)</i>
+                        </div>
+                        <div class="current-total-assets">{{goalFunds.currentTotalAmount | currency:'MYR':'RM ':'1.2-2'}}</div>
+                    </div>
+
+                    <div class="amount-container text-center py-2 mb-3">
+                        <div class="title-label">
+                            Current Total Investment <br />
+                            <i>(Current amount - Amount already have)</i>
+                        </div>
+                        <div class="current-total-investment">
+                            {{(goalFunds.totalInvestmentAmount) | currency:'MYR':'RM ':'1.2-2'}}
+                        </div>
+                    </div>
+
+                    <div class="amount-container text-center py-2">
+                        <div class="title-label">Goal Amount</div>
+                        <div class="goal-account">{{goalFunds.goalAmount | currency:'MYR':'RM ':'1.2-2'}}</div>
+                    </div>
+
+                    <div class="amount-container text-center py-2">
+                        <div class="title-label">Total Invested</div>
+                        <div class="total-investment">{{ (selectedGoal.totalInvestment | currency:'MYR':'RM ':'1.2-2') || '-'}}</div>
+                    </div>
+
+                    <div class="amount-container text-center py-2">
+                        <div class="title-label">Returns</div>
+                        <div class="interest-amount">
+                            {{ (goalFunds.interestAmount | currency:'MYR':'RM ':'1.2-2') || '-'}}
+                            <span [ngClass]="getReturnsPercentageCSS()">
+                                ({{ (goalFunds.returnsPercentage) || 0 }}%)
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="amount-container pb-3">
+                        <div class="title-sub text-center text-label">
+                            <div class="title-label">Total Current Value</div>
+                            <div class="total-goal">{{goalFunds.totalGoalNav}}</div>
+                        </div>
+                        <div class="title-sub-divider"></div>
+
+                        <mat-accordion multi>
+                            <mat-expansion-panel class="expansion-panel" *ngFor="let data of goalFunds.goals; let i = index">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="d-flex align-items-center">
+<!--                                            <div class="mr-3 dot" [ngStyle]="{backgroundColor: i | chartColor }"></div>-->
+                                            <div class="mr-3 dot"></div>
+                                            <div class="fund-label">{{data.fundName}}</div>
+                                        </div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+                                <div class="grid-cols-2">
+                                    <div class="label">Units</div>
+                                    <div class="value">{{ data.units }}</div>
+                                </div>
+
+                                <div class="grid-cols-2">
+                                    <div class="label">NAV</div>
+                                    <div class="value">RM {{ data.nav | number: '1.2-4' }}</div>
+                                </div>
+
+                                <div class="grid-cols-2">
+                                    <div class="label">NAV Date</div>
+                                    <div class="value">{{ data.navDate | date:'DD-MM-YYYY' }}</div>
+                                </div>
+
+                                <div class="grid-cols-2">
+                                    <div class="label">Wrap Fee</div>
+                                    <div class="value">{{ data.wrapFee }}%</div>
+                                </div>
+
+                                <div class="grid-cols-2">
+                                    <div class="label">Wrap Fee Amount</div>
+                                    <div class="value">RM {{ data.wrapFeeAmount | number: '1.2-4' }}</div>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-wrapper left-container" *ngIf="goalFunds">
+            <nav mat-tab-nav-bar>
+                <a mat-tab-link [routerLink]="['details']"
+                    [active]="selectedTab === DetailSubTab.GoalDetails">Details</a>
+                <a mat-tab-link [routerLink]="['transaction-history']"
+                    [active]="selectedTab === DetailSubTab.GoalTransactionHistory">Transaction History</a>
+                <a mat-tab-link [routerLink]="['direct-debit']"
+                    [active]="selectedTab === DetailSubTab.DirectDebit">Direct Debit</a>
+            </nav>
+
+            <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
+        </div>
+    </div>
+</div>

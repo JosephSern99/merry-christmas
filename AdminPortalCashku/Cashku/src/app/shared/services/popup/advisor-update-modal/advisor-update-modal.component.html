@@ -1,0 +1,83 @@
+<div class="modal-header">
+    <span>
+        <h5 class="text-capitalize font-weight-bold">Update Advisor</h5>
+    </span>
+</div>
+<div class="modal-body">
+    <label>Advisor:</label>
+    <div class="font-size-14">
+        <form *ngIf="editForm" [formGroup]="editForm" [class.show-error]="showFormError" (ngSubmit)="onSubmit()">
+            <mat-form-field class="w-100 customer-form-field" appearance="outline">
+                <mat-select class="bg-white" [placeholder]="formattedAdvisor" readonly (selectionChange)="setSelection($event)"
+                    panelClass="search-advisor-panel-class" [multiple]="false"
+                    formControlName="advisor"
+                    [disableRipple]="true">
+                    <div class="row">
+                        <div class="col-12">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="searchControl"
+                                    placeholderLabel="Search advisor"
+                                    [noEntriesFoundLabel]="filteredAdvisors.length === 0 ? 'No Matching Advisor Name found' : ''">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                        </div>
+                        <ng-container *ngIf="isLoadingAdvisors">
+                            <div class="col-12">
+                                <div class="container-fluid bg-light">
+                                    <div class="row py-3">
+                                        <div class="col">
+                                            <mat-progress-bar mode="query"></mat-progress-bar>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="filteredAdvisors.length > 0">
+                            <div class="col-12">
+                                <div class="container-fluid bg-light">
+                                    <div class="row py-3">
+                                        <div class="col">
+                                            <div>Name</div>
+                                        </div>
+                                        <div class="col">
+                                            <div>Email</div>
+                                        </div>
+                                        <div class="col">
+                                            <div>ID</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <mat-option *ngFor="let advisor of filteredAdvisors" [value]="advisor"
+                                    class="px-2">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="font-weight-bold">{{advisor.fullName}}</div>
+                                        </div>
+                                        <div class="col">
+                                            <div>{{advisor.email}}</div>
+                                        </div>
+                                        <div class="col">
+                                            <div>{{advisor.id}}</div>
+                                        </div>
+                                    </div>
+                                </mat-option>
+                            </div>
+                        </ng-container>
+                    </div>
+                </mat-select>
+            </mat-form-field>
+
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn close px-5" (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">Cancel</span>
+                </button>
+
+                <button type="submit" [class.disable]="editForm.invalid" class="mat-button primary darkblue btn primary-submit-button border-0">
+                    <span aria-hidden="true">Update</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

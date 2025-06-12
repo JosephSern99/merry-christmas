@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <span class="text-capitalize">Notes</span>
+
+    <button type="button" class="close" (click)="activeModal.close()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="message"
+        [innerHTML]="'You are not allowed to change the Fund Name. Kindly contact Agmo for further action.'">
+    </div>
+
+    <div class="d-flex justify-content-center actions">
+        <button type="button" class="button" aria-label="OK" (click)="ok()">
+            OK
+        </button>
+    </div>
+</div>

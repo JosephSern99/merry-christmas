@@ -1,0 +1,12 @@
+.active-status {
+    color: #03A58C;
+}
+
+.deactivated-status {
+    color: #DD0A0A;
+}
+
+.three-dot-menu:after {
+    content: '\2807';
+    font-size: 20px;
+}

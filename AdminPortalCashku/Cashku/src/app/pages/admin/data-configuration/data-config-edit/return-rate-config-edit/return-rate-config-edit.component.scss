@@ -1,0 +1,12 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.percentage-return-rate {
+    bottom: 6px;
+    font-weight: bold;
+    right: 25px;
+    position: absolute;
+}

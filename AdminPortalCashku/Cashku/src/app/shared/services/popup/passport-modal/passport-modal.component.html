@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <span>
+        <h5 class="text-capitalize font-weight-bold">Utility Bill Image</h5>
+        <p class="font-weight-normal">Submitted on {{submittedDate | date:'DD-MM-YYYY HH:mm'}}</p>
+    </span>
+
+    <button type="button" class="close" (click)="activeModal.close()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <img class="image" [src]="utilityBillImageUrl" alt="test" width="850"/>
+    <div class="d-flex justify-content-center actions">
+        <a [href]="utilityBillImageUrl" download>
+            <button type="button" class="download">Download</button>
+        </a>
+    </div>
+</div>

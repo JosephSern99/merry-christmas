@@ -1,0 +1,119 @@
+.listing-popup-page-container {
+    background-color: #f7f7fa;
+}
+
+.row-gap {
+    gap: 1.5rem;
+}
+
+.color-grey {
+    color: #888888;
+}
+
+.box-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    flex-basis: 0;
+    flex-grow: 1;
+}
+
+.top-container {
+    display: flex;
+
+    .img-icon {
+        height: 3.5rem;
+    }
+
+    .label-value {
+        color: #0b2696;
+        font-size: 25px;
+        font-weight: bolder;
+    }
+}
+
+.mt-2rem {
+    margin-top: 2rem;
+}
+
+.graph-container {
+    display: flex;
+
+
+    .dropdown-index {
+        right: 1rem;
+        position: absolute;
+        margin-top: -0.7rem;
+    }
+}
+
+.label-title {
+    color: #000000;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+hr.line {
+    border-top: 1px solid #f2f2f2;
+    margin-left: -2rem;
+    margin-right: -2rem;
+}
+
+.net-font {
+    color: #03A592;
+    font-weight: bold;
+}
+
+.profile-pic {
+    height: 45px;
+    width: auto;
+}
+
+span {
+    overflow-wrap: anywhere;
+}
+
+:host::ng-deep.mat-form-field-infix {
+    border-top: unset;
+    text-align: center;
+
+}
+
+:host::ng-deep.mat-select-arrow-wrapper {
+    vertical-align: bottom !important;
+}
+
+.dropdown-container {
+    height: 40px;
+    width: 9rem;
+}
+
+:host::ng-deep.mat-select-value {
+    padding-top: 0.3rem;
+}
+
+:host::ng-deep.mat-select-min-line {
+    margin-right: 2rem !important;
+}
+
+.agmo-dropdown-container {
+    border: 2px solid #E5E5E5;
+}
+
+.customer-list {
+    height: calc(100% - 4rem);
+}
+
+.customer-inner-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 2.5rem);
+    gap: .5rem;
+}
+
+.name-container {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}

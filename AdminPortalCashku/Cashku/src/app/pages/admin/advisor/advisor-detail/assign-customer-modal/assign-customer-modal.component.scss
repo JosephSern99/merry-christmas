@@ -1,0 +1,49 @@
+.text-darkblue {
+    color: #0B2696;
+    font-size: 1rem;
+}
+
+.dropdown-label {
+    padding-left: 40px;
+    font-size: .875rem;
+
+    > div {
+        width: 230px;
+    }
+}
+
+.dropdown-table-option {
+    width: 100%;
+
+    > div {
+        width: 230px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.dropdown-input-field {
+    width: 100%;
+}
+
+.status {
+    font-size: .75rem;
+    color: #DD6231;
+
+    &.success {
+        color: #03A592;
+    }
+}
+
+.red-text {
+    color: red;
+}
+
+::ng-deep .mat-select-arrow { 
+    opacity: 0;
+}
+
+.dropdown-icon {
+    height: 1.5rem;
+    margin-bottom: 12px;
+}

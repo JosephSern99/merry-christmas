@@ -1,0 +1,27 @@
+.report-view {
+    background-color: white;
+}
+
+.secondary-data{
+    color: var(--grey);
+}
+
+.input-form{
+    font-size: small;
+}
+
+.disabled {
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+.btn-all {
+    color: #8524D1;
+    font-weight: 600;
+    font-size: 14px;
+    background-color: transparent;
+    border: 1px solid #ced4da;
+    border-radius: 5px 0 0 5px;
+    border-right-width: 0;
+    padding: 0 8px;
+}

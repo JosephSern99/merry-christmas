@@ -1,0 +1,27 @@
+.modal-header {
+    border-bottom: 0;
+    padding: 1rem 1.5rem;
+
+    span {
+        color: var(--black);
+        font-weight: bold;
+    }
+}
+
+.modal-body {
+    color: var(--black);
+    padding: 0.8rem 1.5rem;
+
+    .actions {
+        margin-top: 1.5rem;
+
+        button {
+            background-color: var(--dark-blue);
+            border-radius: 8px;
+            border: none;
+            color: var(--white);
+            padding: 12px 62px;
+        }
+    }
+}
+

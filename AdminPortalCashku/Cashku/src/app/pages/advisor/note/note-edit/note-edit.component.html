@@ -1,0 +1,109 @@
+<div class="listing-popup-page-container edit-page-container p-0">
+
+    <div class="row breadcrumb-container mb-4">
+        <div class="col-8">
+            @if (true) {
+            <app-planner-note-breadcrumb [uiBreadcrumbs]="getBreadcrumbs()"></app-planner-note-breadcrumb>
+            }
+        </div>
+
+        <div class="col-4 text-right">
+            @if (true) {
+                <button mat-button class="secondary purple mr-2" [routerLink]="['../..']">Back</button>
+            }
+        </div>
+    </div>
+
+    <div class="title-agmo-form">
+        <div class="page-title">{{operationLabel}} Note</div>
+    </div>
+
+    <div class="title-divider"></div>
+
+    <form *ngIf="editForm" class="agmo-form" (ngSubmit)="onSubmit()" [formGroup]="editForm" [class.show-error]="showFormError">
+        <div class="row mb-4">
+            <div class="col-12">
+                <label>Title:</label>
+                <input formControlName="title" type="text" class="form-control agmo-input note-input" required  maxlength="255">
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label>Description:</label>
+            <textarea formControlName="description" class="form-control agmo-input description-input"></textarea>
+        </div>
+
+        <div class="mb-4" *ngIf="assignableCustomer.length > 0">
+            <label>Client:</label>
+            <mat-form-field class="customer-form-field w-100" appearance="outline">
+                <mat-select [formControl]="customerMultiControl" placeholder="Search Client"
+                    panelClass="search-customer-panel-class" [multiple]="true" #multiSelect
+                    (openedChange)="updateSelection($event)">
+                    <mat-option>
+                        <ngx-mat-select-search [formControl]="customerMultiFilterCtrl"
+                            [placeholderLabel]="'Search'"
+                            [noEntriesFoundLabel]="'No Matching Result Found'">
+                        </ngx-mat-select-search>
+                    </mat-option>
+
+                    @if (isSearching) {
+                        <div class="container-fluid bg-light py-3">
+                            <mat-progress-bar mode="query"></mat-progress-bar>
+                        </div>
+                    }
+
+                    @if (customerList.length > 0 && customerMultiFilterCtrl.value === '') {
+                        <mat-option class="font-weight-bold" value="all"
+                                    [disabled]="assignableCustomer.length === selectedCustomers.length">
+                            All Clients
+                        </mat-option>
+                    }
+
+                    @for (customer of customerList; track customer.id) {
+                        <mat-option class="font-weight-bold"
+                                    [disabled]="isEndorsedCustomer(customer.id)"
+                                    placeholder="Choose Customer"
+                                    [value]="customer.id">
+                            {{customer.fullname || '-'}}
+                        </mat-option>
+                    }
+                </mat-select>
+                <mat-icon matSuffix>
+                    <img class="dropdown-icon" src="/assets/images/arrow_down_grey@2x.png">
+                </mat-icon>
+            </mat-form-field>
+
+            <div>
+                <div class="d-flex align-items-center flex-wrap" *ngIf="selectedCustomers.length > 0">
+                    @for (cust of selectedCustomers; track cust.id; let i = $index) {
+                        <div class="py-2">
+                            <div class="d-flex align-items-center selected-customer mr-3"
+                                 [ngClass]="cust.status === EndorseStatusType.Endorsed ? 'endorsed' : 'not-endorsed'">
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3">{{(cust.fullname || cust.email) || '-' }}</div>
+                                    @if (cust.status !== EndorseStatusType.Endorsed) {
+                                        <img class="remove-icon" src="/assets/images/reject_circle_red.png"
+                                             (click)="removeCustomer(i)">
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 text-right">
+                <button type="button" (click)="onSubmit(true)" mat-button class="primary darkblue opacity-4 btn-advisor-portal mr-3">
+                    Save as draft
+                </button>
+
+                <button type="submit" mat-button class="primary darkblue btn-advisor-portal">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>

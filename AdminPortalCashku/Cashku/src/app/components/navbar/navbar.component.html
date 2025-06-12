@@ -1,0 +1,55 @@
+<div class="navbar clearfix">
+  <div class="btn but-menu" (click)="toggleSideMenu()">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <div class="navi-control-holder">
+    <div class="navi-control profile-holder" appClickOutside (clickOutside)="isShowDDProfile = false">
+      <i class="navi-tab fas fa-user-alt" (click)="toggleDDProfile()"></i>
+
+      <div class="navi-dd profile-dd" *ngIf="isShowDDProfile">
+        <!---->
+        <div class="user-holder">
+          <div class="user-photo">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="user-name">{{userProfile?.fullName}}</div>
+          <div class="user-email">{{userProfile?.email}}</div>
+
+          <div class="credit-details">
+            <div class="credit-panel">
+              <div class="credit-val">RM {{(userProfile?.creditBalance ? userProfile?.creditBalance : 0) | number:'1.2'}}</div>
+              <div class="credit-title">Balance</div>
+            </div>
+            <div class="credit-panel">
+              <div class="credit-val code">{{userProfile?.userActivePackage?.packageCode || "-"}}</div>
+              <div class="credit-title">Package</div>
+            </div>
+          </div>
+        </div>
+        <!---->
+        <div class="service-list">
+          <div class="service-panel">
+            <i class="fal fa-stopwatch"></i>
+            <span>Expiry:
+              <span *ngIf="userProfile.userActivePackage && userProfile.userActivePackage.expiryDate">{{userProfile?.userActivePackage?.expiryDate | date:'Do MMM YYYY'}}</span>
+              <span *ngIf="!userProfile.userActivePackage || !userProfile.userActivePackage.expiryDate">-</span>
+            </span>
+          </div>
+          <div class="service-panel click-panel">
+               <a [routerLink]="['/topup-order']">
+                    <i class="fal fa-usd-circle"></i>
+                    <span>Topup Now</span>
+                </a>
+          </div>
+          <div class="service-panel click-panel" (click)="goLogout()">
+            <i class="fal fa-power-off"></i>
+            <span>Sign Out</span>
+          </div>
+        </div>
+        <!---->
+      </div>
+    </div>
+  </div>
+
+</div>
