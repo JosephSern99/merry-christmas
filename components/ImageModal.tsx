@@ -45,7 +45,7 @@ export default function ImageModal({ imageSrc, imageAlt, imageNumber, onClose }:
 
         {/* Modal content */}
         <motion.div
-          className="relative max-w-6xl max-h-[90vh] bg-cream rounded-lg overflow-hidden shadow-2xl border-8 border-gold"
+          className="relative w-full max-w-7xl max-h-[95vh] bg-cream rounded-lg overflow-hidden shadow-2xl border-8 border-gold"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
@@ -77,15 +77,16 @@ export default function ImageModal({ imageSrc, imageAlt, imageNumber, onClose }:
           </div>
 
           {/* Image */}
-          <div className="p-8">
-            <div className="relative w-full max-h-[80vh] aspect-square flex items-center justify-center">
+          <div className="p-4 sm:p-8 flex items-center justify-center">
+            <div className="relative w-full" style={{ height: '80vh' }}>
               <Image
                 src={imageSrc}
                 alt={imageAlt}
                 fill
-                className="object-contain rounded-lg"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 90vw"
                 priority
+                quality={100}
               />
             </div>
           </div>

@@ -14,6 +14,7 @@ const pictures = Array.from({ length: 13 }, (_, i) => ({
 
 export default function TimelineSection() {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [activeImage, setActiveImage] = useState<number>(1);
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll();
 
@@ -25,9 +26,22 @@ export default function TimelineSection() {
   );
 
   const scrollToImage = (index: number) => {
+    setActiveImage(index);
     const element = document.getElementById(`pic-${index}`);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      // Get the scrollable container (overflow-x-auto div)
+      const scrollContainer = element.parentElement?.parentElement;
+      if (scrollContainer) {
+        const elementLeft = element.offsetLeft;
+        const containerWidth = scrollContainer.clientWidth;
+        const elementWidth = element.clientWidth;
+        const scrollPosition = elementLeft - (containerWidth / 2) + (elementWidth / 2);
+
+        scrollContainer.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth'
+        });
+      }
     }
   };
 
@@ -48,11 +62,13 @@ export default function TimelineSection() {
                 className="group relative"
               >
                 <motion.div
-                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-serif transition-colors ${
-                    index === 0 ? 'bg-rose border-rose text-white' : 'bg-white border-golden-warmth text-golden-warmth hover:bg-golden-light'
+                  className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-bold font-serif transition-all duration-300 ${
+                    pic.id === activeImage
+                      ? 'bg-christmas-red border-gold text-white shadow-lg scale-110'
+                      : 'bg-white border-golden-warmth text-golden-warmth hover:bg-golden-light hover:scale-105'
                   }`}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: pic.id === activeImage ? 1.1 : 1.15 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   {pic.id}
                 </motion.div>
