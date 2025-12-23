@@ -52,9 +52,9 @@ export default function TimelineSection() {
       style={{ backgroundColor }}
     >
       {/* Progress indicator with navigation */}
-      <div className="sticky top-4 z-30 flex justify-center mb-12">
-        <div className="bg-white/90 backdrop-blur-sm rounded-full px-8 py-4 shadow-xl border-4 border-gold">
-          <div className="flex items-center gap-2">
+      <div className="sticky top-4 z-30 flex justify-center mb-12 px-2">
+        <div className="bg-white/90 backdrop-blur-sm rounded-full px-3 sm:px-8 py-3 sm:py-4 shadow-xl border-2 sm:border-4 border-gold max-w-full overflow-x-auto hide-scrollbar">
+          <div className="flex items-center gap-1 sm:gap-2">
             {pictures.map((pic, index) => (
               <button
                 key={pic.id}
@@ -62,7 +62,7 @@ export default function TimelineSection() {
                 className="group relative"
               >
                 <motion.div
-                  className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-bold font-serif transition-all duration-300 ${
+                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 flex items-center justify-center text-xs sm:text-sm font-bold font-serif transition-all duration-300 flex-shrink-0 ${
                     pic.id === activeImage
                       ? 'bg-christmas-red border-gold text-white shadow-lg scale-110'
                       : 'bg-white border-golden-warmth text-golden-warmth hover:bg-golden-light hover:scale-105'
