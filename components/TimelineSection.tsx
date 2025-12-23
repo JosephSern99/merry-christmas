@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import ImageModal from './ImageModal';
@@ -24,6 +24,41 @@ export default function TimelineSection() {
     [0.3, 0.5, 0.7],
     ['#F4E4C1', '#E8B4B8', '#8B0000']
   );
+
+  // Update active image based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollContainer = document.querySelector('.timeline-scroll-container');
+      if (!scrollContainer) return;
+
+      const containerCenter = scrollContainer.scrollLeft + scrollContainer.clientWidth / 2;
+
+      // Find which image is closest to center
+      let closestImage = 1;
+      let closestDistance = Infinity;
+
+      pictures.forEach((pic) => {
+        const element = document.getElementById(`pic-${pic.id}`);
+        if (element) {
+          const elementCenter = element.offsetLeft + element.clientWidth / 2;
+          const distance = Math.abs(containerCenter - elementCenter);
+
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestImage = pic.id;
+          }
+        }
+      });
+
+      setActiveImage(closestImage);
+    };
+
+    const scrollContainer = document.querySelector('.timeline-scroll-container');
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+      return () => scrollContainer.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
 
   const scrollToImage = (index: number) => {
     setActiveImage(index);
@@ -83,7 +118,7 @@ export default function TimelineSection() {
       </div>
 
       {/* Horizontal scrolling timeline */}
-      <div className="overflow-x-auto pb-8 hide-scrollbar">
+      <div className="overflow-x-auto pb-8 hide-scrollbar timeline-scroll-container">
         <div className="flex gap-8 px-8 min-w-max">
           {pictures.map((picture, index) => (
             <motion.div
