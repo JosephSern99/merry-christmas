@@ -1,9 +1,0 @@
-<ng-container *ngFor="let breadcrumb of uiBreadcrumbs; let first = first; let last = last">
-    <span class="clickable"[class.not-clickable]="!breadcrumb.path">
-        <a  [routerLink]="[breadcrumb.path]" >
-        <img *ngIf="first" class="people-icon" src="/assets/images/icon_people@2x.png" alt="People Logo">
-        {{breadcrumb.title}}
-        </a>
-    </span>
-    <span *ngIf="!last" class="separator">&#62;</span>
-</ng-container>
