@@ -31,7 +31,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# development tools
-.bmad-core
-.claude
